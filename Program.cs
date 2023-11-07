@@ -44,6 +44,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// use exception handler 
+app.UseExceptionHandlerMiddleware();
+
 //app.UseAuthorization();
 app.UseJwtMiddleware();
 
