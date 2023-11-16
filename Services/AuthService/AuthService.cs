@@ -17,7 +17,7 @@ namespace JwtAuthenticationWithMiddlewares.Services.AuthService
         }
 
 
-
+        //Token authentication method
         public BaseResponse Authenticate(AuthenticateRequest request)
         {
             try
