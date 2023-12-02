@@ -1,4 +1,6 @@
-﻿namespace JwtAuthenticationWithMiddlewares.Helpers.Requests.User
+﻿using JwtAuthenticationWithMiddlewares.Attributes;
+
+namespace JwtAuthenticationWithMiddlewares.Helpers.Requests.User
 {
     public class CreateUserRequest
     {
@@ -8,6 +10,7 @@
 
         public string username { get; set; }
 
+        [EmailValidation]
         public string email { get; set; }
 
         public string password { get; set; }

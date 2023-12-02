@@ -1,4 +1,5 @@
-﻿using JwtAuthenticationWithMiddlewares.Helpers.Requests.Auth;
+﻿using JwtAuthenticationWithMiddlewares.Attributes;
+using JwtAuthenticationWithMiddlewares.Helpers.Requests.Auth;
 using JwtAuthenticationWithMiddlewares.Helpers.Responses;
 using JwtAuthenticationWithMiddlewares.Services.AuthService;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ namespace JwtAuthenticationWithMiddlewares.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ModelStateValidate]
     public class AuthController : ControllerBase
     {
 

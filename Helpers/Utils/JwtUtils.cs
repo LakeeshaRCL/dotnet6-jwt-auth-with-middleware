@@ -98,5 +98,32 @@ namespace JwtAuthenticationWithMiddlewares.Helpers.Utils
                 return false;
             }
         }
+
+
+
+        //public static T GetTokenClaim<T>(JwtSecurityToken jwtSecurityToken, string claimId)
+        //{
+        //    object output = null;
+           
+        //    try
+        //    {
+                
+        //        if (typeof(T) == typeof(string))
+        //        {
+        //            output = jwtSecurityToken.Claims.First(claim => claim.Type == claimId).Value.ToString();
+        //        } 
+        //        else if(typeof() == typeof(long)) {
+
+        //            output = long.Parse(jwtSecurityToken.Claims.First(claim => claim.Type == claimId).Value.ToString());
+        //        }
+
+        //        return (T)output;
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return (T)output;
+
+        //    }
+        //}
     }
 }
