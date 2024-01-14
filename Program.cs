@@ -1,4 +1,5 @@
 using JwtAuthenticationWithMiddlewares;
+using JwtAuthenticationWithMiddlewares.Helpers.Pagination;
 using JwtAuthenticationWithMiddlewares.Helpers.Utils.GlobalAttributes;
 using JwtAuthenticationWithMiddlewares.Middlewares;
 using JwtAuthenticationWithMiddlewares.Services.AuthService;
@@ -25,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IStoryService,StoryService>();
+builder.Services.AddScoped<QueryPaginator, QueryPaginator>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -35,6 +37,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// CORS
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(builder => {
+        builder.AllowAnyHeader();
+        builder.AllowAnyOrigin();
+        builder.AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,11 +55,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// use CORS
+app.UseCors();
+
 // use exception handler 
 app.UseExceptionHandlerMiddleware();
 
 //app.UseAuthorization();
-app.UseJwtMiddleware();
+//app.UseJwtMiddleware();
 
 app.MapControllers();
 

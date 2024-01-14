@@ -5,8 +5,14 @@ namespace JwtAuthenticationWithMiddlewares.Services.StoryService
 {
     public interface IStoryService
     {
-       BaseResponse AddStory(AddStoryRequest request);
+        BaseResponse AddStory(AddStoryRequest request);
+        BaseResponse AddStories();
 
-       BaseResponse GetAll();
+        /// <summary>
+        /// Example description
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        BaseResponse GetAll(GetStoriesRequest request);
     }
 }
