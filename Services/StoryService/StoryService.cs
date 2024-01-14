@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using JwtAuthenticationWithMiddlewares.DTOs;
+using JwtAuthenticationWithMiddlewares.DTOs.Pagination;
+using JwtAuthenticationWithMiddlewares.Helpers.Pagination;
 using JwtAuthenticationWithMiddlewares.Helpers.Requests.Story;
 using JwtAuthenticationWithMiddlewares.Helpers.Responses;
 using JwtAuthenticationWithMiddlewares.Models;
@@ -10,14 +12,20 @@ namespace JwtAuthenticationWithMiddlewares.Services.StoryService
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly QueryPaginator queryPaginator;
 
-        public StoryService(ApplicationDbContext dbContext, IMapper mapper)
+        public StoryService(ApplicationDbContext dbContext, IMapper mapper, QueryPaginator queryPaginator)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.queryPaginator = queryPaginator;
         }
 
-
+        /// <summary>
+        /// Example description
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public BaseResponse AddStory(AddStoryRequest request)
         {
             try
@@ -49,22 +57,58 @@ namespace JwtAuthenticationWithMiddlewares.Services.StoryService
         }
 
 
-        public BaseResponse GetAll()
+
+        public BaseResponse AddStories()
         {
             try
             {
-                List<StoryDTO> storyDTOs = new List<StoryDTO>();
+                int recordCount = 150;
 
-                // get stories from the database
-                List<StoryModel> stories = dbContext.Story.ToList();
-
-                // map models to DTOs
-                foreach (StoryModel story in stories)
+                for (int i=0; i < recordCount; i++)
                 {
-                    storyDTOs.Add(mapper.Map<StoryDTO>(story));
+                    StoryModel newStory = new StoryModel();
+                    newStory.title = String.Concat("Title", (i+1));
+                    newStory.description = String.Concat("Sample description for ", (i + 1));
+                    newStory.user_id = 1;
+
+                    dbContext.Story.Add(newStory);
+                    dbContext.SaveChanges();
                 }
 
-                return new BaseResponse { status_code = StatusCodes.Status200OK, data = new { stories = storyDTOs} };
+                
+                return new BaseResponse { status_code = StatusCodes.Status200OK, data = new MessageDTO("Sotry added successfully") };
+
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse { status_code = StatusCodes.Status500InternalServerError, data = new MessageDTO(ex.Message) };
+            }
+        }
+
+
+
+        public BaseResponse GetAll(GetStoriesRequest request)
+        {
+            try
+            {
+
+                BaseResponse response;
+                var query = dbContext.Story.AsEnumerable().Join(dbContext.User.ToList(), story => story.user_id, user => user.id, (s, u) => new { story = s, user = u })
+                    .Select(su => new StoryUserDTO
+                    {
+                        id = su.story.id,
+                        author_id = su.user.id,
+                        description = su.story.description,
+                        title = su.story.title,
+                        author_name = new UserNameDTO { first_name = su.user.first_name, last_name = su.user.last_name }
+                    });
+
+                // get paginated data
+                PaginationMetaDataDTO<List<StoryUserDTO>> paginatedData = queryPaginator.GetPaginatedData(query, request.page_number);
+
+                response = new BaseResponse { status_code = StatusCodes.Status200OK, data = new { stories = paginatedData } };
+
+                return response;
 
             }
             catch (Exception ex)

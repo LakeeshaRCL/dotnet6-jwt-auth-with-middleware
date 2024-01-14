@@ -25,11 +25,17 @@ namespace JwtAuthenticationWithMiddlewares.Controllers
             return storyService.AddStory(request);
         }
 
-
-        [HttpGet("getAll")]
-        public BaseResponse GetAll()
+        [HttpPost("addStories")]
+        public BaseResponse AddStories()
         {
-            return storyService.GetAll();
+            return storyService.AddStories();
+        }
+
+
+        [HttpPost("getAll")]
+        public BaseResponse GetAll(GetStoriesRequest request)
+        {
+            return storyService.GetAll(request);
         }
 
     }
