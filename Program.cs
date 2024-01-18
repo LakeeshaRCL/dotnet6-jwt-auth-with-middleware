@@ -61,8 +61,8 @@ app.UseCors();
 // use exception handler 
 app.UseExceptionHandlerMiddleware();
 
-//app.UseAuthorization();
-//app.UseJwtMiddleware();
+app.UseAuthorization();
+app.UseJwtMiddleware();
 
 app.MapControllers();
 
