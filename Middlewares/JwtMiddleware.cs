@@ -63,7 +63,7 @@ namespace JwtAuthenticationWithMiddlewares.Middlewares
         {
             List<string> enabledRoutes = new List<string>
             {
-                "/api/User/createUser",
+                "/api/user/createuser",
                 "/api/auth/authenticate",
             };
 
@@ -71,7 +71,7 @@ namespace JwtAuthenticationWithMiddlewares.Middlewares
 
             if (httpContext.Request.Path.Value is not null)
             {
-                isEnableUnauthorizedRoute = enabledRoutes.Contains(httpContext.Request.Path.Value);
+                isEnableUnauthorizedRoute = enabledRoutes.Contains(httpContext.Request.Path.Value.ToString());
             }
 
 
